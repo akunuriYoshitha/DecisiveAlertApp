@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
@@ -23,6 +24,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 public class MainActivity extends AppCompatActivity {
+
+    TextView skipLogin;
+
     private static final int RC_SIGN_IN = 1;
     FirebaseAuth firebaseAuth;
     String TAG = "google signin";
@@ -34,15 +38,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         googleButton = (SignInButton) findViewById(R.id.google_signin);
-
+        skipLogin = (TextView) findViewById(R.id.skipLogin);
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null)
                 {
-                    Intent intent = new Intent(MainActivity.this, AccountActivity.class);
+                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    intent.putExtra("EXTRA_SESSION_ID", "no");
                     startActivity(intent);
                     finish();
                 }
@@ -67,6 +72,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 signIn();
+            }
+        });
+
+        skipLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("EXTRA_SESSION_ID", "yes");
+                startActivity(intent);
+                finish();
             }
         });
     }

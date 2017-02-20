@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="com.example.yoshi.decisivealertapp.SettingsActivity">
+
+
+    <TextView
+        android:text="@string/setContacts"
+        android:textSize="@dimen/text_size_settings"
+        android:textColor="@color/colorBlack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="23dp"
+        android:id="@+id/calls1" />
+
+    <TextView
+        android:text="@string/nextButton"
+        android:textSize="@dimen/text_size_settings"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/calls1"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:id="@+id/calls2" />
+
+    <TextView
+        android:text="@string/setMode"
+        android:textSize="@dimen/text_size_settings"
+        android:textColor="@color/colorBlack"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:id="@+id/msg1"
+        android:layout_below="@+id/calls1"
+        android:layout_alignLeft="@+id/calls1"
+        android:layout_alignStart="@+id/calls1" />
+
+    <TextView
+        android:text="@string/setNumCalls"
+        android:textSize="@dimen/text_size_settings"
+        android:layout_width="280dp"
+        android:textColor="@color/colorBlack"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/msg1"
+        android:layout_alignLeft="@+id/msg1"
+        android:layout_alignStart="@+id/msg1"
+        android:layout_marginTop="17dp"
+        android:id="@+id/numCalls1" />
+
+    <TextView
+        android:text="@string/nextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/numCalls2"
+        android:textSize="@dimen/text_size_settings"
+        android:layout_alignBottom="@+id/numCalls1"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="15dp" />
+
+    <TextView
+        android:text="@string/sendSMS"
+        android:textSize="@dimen/text_size_settings"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:textColor="@color/colorBlack"
+        android:gravity="center"
+        android:id="@+id/sms"
+        android:layout_below="@+id/numCalls1"
+        android:layout_alignLeft="@+id/numCalls1"
+        android:layout_alignStart="@+id/numCalls1"
+        android:layout_marginTop="13dp" />
+
+    <Switch
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+
+        android:textSize="@dimen/text_size_settings"
+        android:switchMinWidth="50dp"
+        android:id="@+id/sms_switch"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/sms" />
+
+
+
+    <TextView
+        android:text="@string/giveSMS"
+        android:textSize="@dimen/text_size_settings"
+        android:textColor="@color/colorBlack"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@+id/sms"
+        android:layout_alignLeft="@+id/sms"
+        android:layout_alignStart="@+id/sms"
+        android:layout_marginTop="12dp"
+        android:id="@+id/usermsg1" />
+
+    <TextView
+        android:text=""
+        android:textSize="@dimen/text_size_settings"
+
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/calls2"
+        android:layout_toLeftOf="@+id/calls2"
+        android:layout_toStartOf="@+id/calls2"
+        android:id="@+id/calls3" />
+
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="@string/sampleSMS"
+        android:textSize="@dimen/sample_msg_size"
+
+        android:textColor="@color/colorAccent"
+        android:ems="10"
+        android:id="@+id/smsText"
+        android:gravity="bottom"
+        android:layout_alignTop="@+id/usermsg1"
+        android:layout_alignLeft="@+id/usermsg1"
+        android:layout_alignStart="@+id/usermsg1"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/usermsg1" />
+
+    <Spinner
+        android:id="@+id/mode"
+        android:layout_width="200dp"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
+        android:textAlignment="textEnd"
+        android:layout_above="@+id/numCalls1"
+        android:layout_toRightOf="@+id/calls1"
+        android:layout_toEndOf="@+id/calls1"
+        android:layout_marginLeft="11dp"
+        android:layout_marginStart="11dp">
+    </Spinner>
+
+</RelativeLayout>

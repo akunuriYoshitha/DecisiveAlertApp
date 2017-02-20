@@ -1,3 +1,24 @@
 <resources>
-    <string name="app_name">DecisiveAlertApp</string>
+    <string name="app_name">DecisiveAlert</string>
+
+    <string-array name="mode">
+        <item> Meeting </item>
+        <item> Outdoor </item>
+    </string-array>
+
+    <string name="pickContact"> pick contact </string>
+    <string name="setNumberPicker"> set </string>
+    <string name="cancelNumberpicker"> exit </string>
+    <string name="setContactNobody"> Nobody </string>
+    <string name="setContactCustom"> Custom Contacts </string>
+    <string name="editContacts"> Edit your custom contacts </string>
+    <string name="setContacts"> Allow calls from :  </string>
+    <string name="setNumCalls"> After how many calls would you like to allow ? </string>
+    <string name="sendSMS"> Send an SMS </string>
+    <string name="sampleSMS"> Busy!!! Please call later... </string>
+    <string name="giveSMS"> Give your message :  </string>
+    <string name="setMode"> Select your mode </string>
+    <string name="login_text"> Please sign in with your google account to save your settings </string>
+    <string name="skip_login"> <u>Skip this step for now</u></string>
+    <string name="nextButton"> " > " </string>
 </resources>

@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:orientation="vertical"
+    android:id="@+id/ll1"
+    android:weightSum="1"
+    android:background="@drawable/background">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/on_icon"
+        android:id="@+id/on_button"
+
+        android:background="@null"
+        android:layout_below="@+id/off_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/off_icon"
+        android:id="@+id/off_button"
+        android:background="@null"
+        android:visibility="gone"
+        android:layout_marginTop="102dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:text=""
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="46dp"
+        android:id="@+id/user_msg"
+        android:textSize="18dp"
+        android:gravity="center"
+        android:textColor="@color/colorBlack"
+        android:layout_below="@+id/on_button"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

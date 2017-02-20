@@ -15,7 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AccountActivity"></activity>
+        <activity android:name=".AccountActivity" />
+        <activity android:name=".HomeActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".SetContacts" />
+        <activity android:name=".CustomContacts"></activity>
     </application>
 
 </manifest>
