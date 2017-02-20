@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "468619537365",
+    "firebase_url": "https://decisivealertapp.firebaseio.com",
+    "project_id": "decisivealertapp",
+    "storage_bucket": "decisivealertapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:468619537365:android:4909e24f0e94013b",
+        "android_client_info": {
+          "package_name": "com.example.yoshi.decisivealertapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468619537365-1d7h0i8qicp6cc3ck1keqjuu8960a9ft.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.yoshi.decisivealertapp",
+            "certificate_hash": "F87E19AC11D218729BB1AD0489273319CCE57987"
+          }
+        },
+        {
+          "client_id": "468619537365-al50ea935t8s3lqiuor1r7skrfv4o03q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCH6ImorrivNtBjVw-vv-aakUfZzkPEicI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468619537365-al50ea935t8s3lqiuor1r7skrfv4o03q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
