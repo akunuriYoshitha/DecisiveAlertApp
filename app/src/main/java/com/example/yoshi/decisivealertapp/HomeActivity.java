@@ -186,6 +186,8 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 break;
+            case R.id.action_about : startActivity(new Intent(HomeActivity.this, AboutActivity.class));
+                break;
             case R.id.action_save_to_cloud :
                 if (firebaseAuth.getCurrentUser() == null)
                 {
@@ -264,7 +266,7 @@ public class HomeActivity extends AppCompatActivity {
             {
                 firebaseAuth.signOut();
                 Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-
+                break;
             }
             default : return super.onOptionsItemSelected(item);
         }
