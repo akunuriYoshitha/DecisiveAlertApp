@@ -68,6 +68,14 @@ public class MyDatabase extends SQLiteOpenHelper{
             return 1;
         return 0;
     }
+    public void truncateCustomContacts()
+    {
+        db = this.getWritableDatabase();
+        db.execSQL("delete from CustomContacts");
+        Log.d("pppp", "Table truncated");
+    }
+
+
 
     public Cursor getCustomContacts ()
     {
@@ -125,6 +133,19 @@ public class MyDatabase extends SQLiteOpenHelper{
         Log.d("pppp", "Table truncated");
     }
 
+    public Cursor getAllSettings ()
+    {
+        db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from Settings;", null);
+        return result;
+    }
+
+    public void truncateSettings()
+    {
+        db = this.getWritableDatabase();
+        db.execSQL("delete from Settings");
+        Log.d("pppp", "Table truncated");
+    }
 
     public String getSettingsData(String table_name, String setting_name)
     {

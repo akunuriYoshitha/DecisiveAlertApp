@@ -30,6 +30,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
             String incomingNumber = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER);
             Log.d("pppp", incomingNumber);
             if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+                incomingNumber = incomingNumber.replace(" ", "");
                 if (mydb.getSettingsData("Settings", "Mode").equals("Meeting"))
                     changePhoneMode(context, mydb, incomingNumber, AudioManager.RINGER_MODE_SILENT, AudioManager.RINGER_MODE_VIBRATE);
                 else
@@ -121,20 +122,34 @@ public class PhoneStateReceiver extends BroadcastReceiver {
 
     }
 
-    public  void changePhoneMode (Context context, MyDatabase mydb, String incomingNumber, final int mode1, int mode2)
+    public  void changePhoneMode (Context context, MyDatabase mydb, String incomingNumber, final int mode1, final int mode2)
     {
         if (mydb.getSettingsData("Settings", "manual").equals("yes"))
         {
-
+            Toast.makeText(context, "custom contacts reading....", Toast.LENGTH_SHORT).show();
             Cursor customContacts = mydb.getCustomContacts();
+            Toast.makeText(context, "custom contacts read", Toast.LENGTH_SHORT).show();
             if (mydb.getSettingsData("Settings", "Calls").equals("custom"))
             {
+                Toast.makeText(context, "In custom contacts mode", Toast.LENGTH_SHORT).show();
                 while (customContacts.moveToNext())
                 {
-                    if (customContacts.getString(0).equals(incomingNumber))
+                    Toast.makeText(context, "Incoming num : " + incomingNumber, Toast.LENGTH_SHORT).show();
+
+
+//                    Log.d("gggg", incomingNumber);
+//                    Log.d("gggg", customContacts.getString(0));
+                    String customContact = customContacts.getString(0).replace(" ", "");
+                    Toast.makeText(context, "Custom Contact : " + customContact, Toast.LENGTH_SHORT).show();
+                    if (customContact.equals(incomingNumber))
                     {
+                        Toast.makeText(context, "Both are equal", Toast.LENGTH_SHORT).show();
                         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+                        if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT)
+                            Toast.makeText(context, "silent audio manager", Toast.LENGTH_SHORT).show();
                         audioManager.setRingerMode(mode2);
+                        if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
+                            Toast.makeText(context, "vibrate audio manager", Toast.LENGTH_SHORT).show();
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override

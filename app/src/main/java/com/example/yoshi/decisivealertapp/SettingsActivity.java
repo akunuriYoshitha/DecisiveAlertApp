@@ -24,6 +24,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
+
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
 import static android.media.AudioManager.RINGER_MODE_VIBRATE;
@@ -33,6 +36,11 @@ import static android.media.AudioManager.RINGER_MODE_VIBRATE;
  */
 
 public class SettingsActivity extends AppCompatActivity implements NumberPicker.OnValueChangeListener{
+    HomeActivity homeActivity = new HomeActivity();
+    FirebaseAuth firebaseAuth;
+    Firebase parent;
+    Firebase childSettings;
+
     AudioManager myAudioManager;
     MyDatabase mydb = new MyDatabase(SettingsActivity.this);
     TextView numCalls1, numCalls2;
@@ -55,9 +63,18 @@ public class SettingsActivity extends AppCompatActivity implements NumberPicker.
         numCalls2 = (TextView) findViewById(R.id.numCalls2);
         sw1 = (Switch) findViewById(R.id.sms_switch);
         smsText = (EditText) findViewById(R.id.smsText);
+        firebaseAuth = FirebaseAuth.getInstance();
+
+
+
+
         numCalls2.setText(mydb.getSettingsData("Settings", "numOfCalls") + " > ");
         smsText.setText(mydb.getSettingsData("Settings", "SMSText"));
         calls2.setText(mydb.getSettingsData("Settings", "Calls") + " > ");
+        if (mydb.getSettingsData("Settings", "sendSMS").equals("yes"))
+            sw1.setChecked(true);
+        else
+            sw1.setChecked(false);
         mode = (Spinner) findViewById(R.id.mode);
 
         mode_adapter = ArrayAdapter.createFromResource(this, R.array.mode, android.R.layout.simple_spinner_item);
@@ -65,16 +82,24 @@ public class SettingsActivity extends AppCompatActivity implements NumberPicker.
         mode.setAdapter(mode_adapter);
         String mode_value = mydb.getSettingsData("Settings", "Mode");
         mode.setSelection(mode_adapter.getPosition(mode_value));
+
         mode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mydb.updateSettings("Settings", "Mode", parent.getItemAtPosition(position).toString());
+
                 if (mydb.getSettingsData("Settings", "manual").equals("yes"))
                 {
                     if (position == 0)
+                    {
                         silentModeOn();
+                    }
+
                     else
+                    {
                         vibratetModeOn();
+                    }
+
 
                 }
             }
@@ -175,31 +200,6 @@ public class SettingsActivity extends AppCompatActivity implements NumberPicker.
 
     }
 
-    public void silentModeOn()
-    {
-        myAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        myAudioManager.setRingerMode(RINGER_MODE_SILENT);
-        if (myAudioManager.getRingerMode() == RINGER_MODE_SILENT)
-            Toast.makeText(SettingsActivity.this, "In silent mode", Toast.LENGTH_SHORT).show();
-    }
-
-
-
-    public void vibratetModeOn()
-    {
-        myAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        myAudioManager.setRingerMode(RINGER_MODE_VIBRATE);
-        if (myAudioManager.getRingerMode() == RINGER_MODE_VIBRATE)
-            Toast.makeText(SettingsActivity.this, "In vibrate mode", Toast.LENGTH_SHORT).show();
-    }
-
-    public void normalModeOn()
-    {
-        myAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        myAudioManager.setRingerMode(RINGER_MODE_NORMAL);
-        if (myAudioManager.getRingerMode() == RINGER_MODE_NORMAL)
-            Toast.makeText(SettingsActivity.this, "In ringing mode", Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -277,5 +277,32 @@ public class SettingsActivity extends AppCompatActivity implements NumberPicker.
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
 
+    }
+
+    public void silentModeOn()
+    {
+        myAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        myAudioManager.setRingerMode(RINGER_MODE_SILENT);
+        if (myAudioManager.getRingerMode() == RINGER_MODE_SILENT)
+            Toast.makeText(SettingsActivity.this, "In silent mode", Toast.LENGTH_SHORT).show();
+    }
+
+
+
+    public void vibratetModeOn()
+    {
+        myAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        myAudioManager.setRingerMode(RINGER_MODE_VIBRATE);
+        if (myAudioManager.getRingerMode() == RINGER_MODE_VIBRATE)
+            Toast.makeText(SettingsActivity.this, "In vibrate mode", Toast.LENGTH_SHORT).show();
+    }
+
+    public void normalModeOn()
+    {
+        myAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        myAudioManager.setRingerMode(RINGER_MODE_NORMAL);
+        myAudioManager.setStreamVolume(AudioManager.STREAM_RING,myAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING),0);
+        if (myAudioManager.getRingerMode() == RINGER_MODE_NORMAL)
+            Toast.makeText(SettingsActivity.this, "In ringing mode", Toast.LENGTH_SHORT).show();
     }
 }

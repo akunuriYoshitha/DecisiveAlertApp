@@ -2,6 +2,7 @@ package com.example.yoshi.decisivealertapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,11 +15,18 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Iterator;
+import java.util.Map;
 
 import static android.media.AudioManager.RINGER_MODE_NORMAL;
 import static android.media.AudioManager.RINGER_MODE_SILENT;
@@ -27,6 +35,7 @@ import static android.media.AudioManager.RINGER_MODE_VIBRATE;
 public class HomeActivity extends AppCompatActivity {
     FirebaseAuth firebaseAuth;
     FirebaseAuth.AuthStateListener authStateListener;
+    Firebase childSetting, parent, settingsData;
     private AudioManager myAudioManager;
     GoogleApiClient mGoogleApiClient;
     MyDatabase mydb = new MyDatabase(HomeActivity.this);
@@ -35,6 +44,7 @@ public class HomeActivity extends AppCompatActivity {
     String parameter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         firebaseAuth = FirebaseAuth.getInstance();
@@ -42,6 +52,9 @@ public class HomeActivity extends AppCompatActivity {
         on_button = (ImageButton) findViewById(R.id.on_button);
         off_button = (ImageButton) findViewById(R.id.off_button);
         user_msg = (TextView) findViewById(R.id.user_msg);
+        Firebase.setAndroidContext(this);
+        if (firebaseAuth.getCurrentUser() != null)
+            parent = new Firebase("https://decisivealertapp.firebaseio.com/user-" + firebaseAuth.getCurrentUser().getUid());
 //        startService(new Intent(this, MyService.class));
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -71,6 +84,8 @@ public class HomeActivity extends AppCompatActivity {
                         }
 
                     }
+                    else
+                        Toast.makeText(HomeActivity.this, firebaseAuth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
                 }
 
         };
@@ -95,6 +110,8 @@ public class HomeActivity extends AppCompatActivity {
         }
         else
         {
+            mydb.truncateCallers();
+            Toast.makeText(HomeActivity.this, "callers truncated", Toast.LENGTH_SHORT).show();
             if (mydb.getSettingsData("Settings", "Mode").equals("Meeting"))
             {
                 on_button.setVisibility(View.VISIBLE);
@@ -136,6 +153,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mydb.updateSettings("Settings", "manual", "no");
                 mydb.truncateCallers();
+                Toast.makeText(HomeActivity.this, "callers truncated", Toast.LENGTH_SHORT).show();
                 if (mydb.getSettingsData("Settings", "Mode").equals("Meeting"))
                 {
                     on_button.setVisibility(View.VISIBLE);
@@ -172,6 +190,80 @@ public class HomeActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
+                break;
+            case R.id.action_save_to_cloud : Toast.makeText(HomeActivity.this, "Saving...", Toast.LENGTH_SHORT).show();
+                if (firebaseAuth.getCurrentUser() == null)
+                {
+                    Toast.makeText(HomeActivity.this, "Kindly login to save your settings", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+
+
+//                Firebase settingData = childSetting.child("manualmode");
+                Cursor settings = mydb.getAllSettings();
+                while (settings.moveToNext())
+                {
+                    childSetting = parent.child("Settings");
+                    settingsData = childSetting.child(settings.getString(0));
+                    settingsData.setValue(settings.getString(1));
+                }
+                Cursor customContacts = mydb.getCustomContacts();
+                parent.child("Custom Contacts").removeValue();
+                while (customContacts.moveToNext())
+                {
+                    childSetting = parent.child("Custom Contacts");
+                    settingsData = childSetting.child(customContacts.getString(0));
+                    settingsData.setValue(customContacts.getString(1));
+                }
+
+                break;
+            case R.id.action_restore_settings : Toast.makeText(HomeActivity.this, "Restoring....", Toast.LENGTH_SHORT).show();
+                if (firebaseAuth.getCurrentUser() == null)
+                {
+                    Toast.makeText(HomeActivity.this, "Kindly login to restore your settings", Toast.LENGTH_SHORT).show();
+                    break;
+                }
+                mydb.truncateCustomContacts();
+//                mydb.truncateSettings();
+//                        Toast.makeText(HomeActivity.this, "Custom contacts truncated", Toast.LENGTH_SHORT).show();
+                parent.child("Custom Contacts").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, String> contacts = dataSnapshot.getValue(Map.class);
+//                        Toast.makeText(HomeActivity.this, contacts.get("9032799996"), Toast.LENGTH_SHORT).show();
+                        Iterator customContactsIterator = contacts.keySet().iterator();
+                        while (customContactsIterator.hasNext())
+                        {
+                            String key = customContactsIterator.next().toString();
+                            int result = mydb.insertCustomContacts(key, contacts.get(key));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+
+                parent.child("Settings").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String, String> settings = dataSnapshot.getValue(Map.class);
+//                        Toast.makeText(HomeActivity.this, contacts.get("9032799996"), Toast.LENGTH_SHORT).show();
+                        Iterator settingsIterator = settings.keySet().iterator();
+                        while (settingsIterator.hasNext())
+                        {
+                            String key = settingsIterator.next().toString();
+                            boolean result = mydb.updateSettings("Settings", key, settings.get(key));
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+
                 break;
             case R.id.action_logout : if (firebaseAuth.getCurrentUser() == null)
             {

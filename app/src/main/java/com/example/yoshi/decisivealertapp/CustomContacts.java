@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ public class CustomContacts extends Activity{
     ArrayAdapter<String> adapter;
     private static final int RESULT_PICK_CONTACT = 85500;
     ArrayList<String> list = new ArrayList<String>();
+    ImageButton back_button;
     ListView contactsList;
     private TextView textView1;
     private TextView textView2;
@@ -33,6 +35,7 @@ public class CustomContacts extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_contacts);
+
 //        textView1 = (TextView) findViewById(R.id.textView1);
 //        textView2 = (TextView) findViewById(R.id.textView2);
         contactsList = (ListView) findViewById(R.id.contacts);

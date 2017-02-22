@@ -1,28 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background">
 
 
-    <ListView
-        android:id="@+id/contacts"
+    <TextView
+        android:text="Your custom contacts"
 
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pickContact"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="11dp" />
-
-    <Button
-        android:text="@string/pickContact"
-        android:onClick="pickContact"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:id="@+id/pickContact"
+        android:textSize="@dimen/sample_msg_size"
         android:gravity="center"
-        android:background="#FFFFFF"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorPrimary"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:id="@+id/contacts"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="12dp"
+        android:layout_below="@+id/pickContact"
+        android:layout_toStartOf="@+id/pickContactButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <ImageView
+        android:background="@null"
+        android:id="@+id/pickContactButton"
+        android:onClick="pickContact"
+        android:src = "@drawable/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_above="@+id/contacts"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="13dp"
+        android:layout_marginEnd="13dp" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/back_button"
+        android:id="@+id/imageView2"
+        android:layout_alignTop="@+id/pickContactButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
 </RelativeLayout>

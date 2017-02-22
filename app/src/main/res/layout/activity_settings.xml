@@ -144,6 +144,7 @@
         android:layout_alignParentRight="true"
         android:layout_height="wrap_content"
         android:textAlignment="textEnd"
+        android:popupBackground="#ffff80"
         android:layout_above="@+id/numCalls1"
         android:layout_toRightOf="@+id/calls1"
         android:layout_toEndOf="@+id/calls1"

@@ -6,12 +6,5 @@
         android:title="Home"
         android:icon="@drawable/home"
         app:showAsAction="always"></item>
-    <item
-        android:title="About"
-        android:id="@+id/action_about"
-        app:showAsAction="never"/>
-    <item
-        android:title="Logout"
-        android:id="@+id/action_logout"
-        app:showAsAction="never"/>
+
 </menu>

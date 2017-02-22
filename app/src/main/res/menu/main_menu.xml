@@ -12,6 +12,14 @@
         android:id="@+id/action_about"
         app:showAsAction="never"/>
     <item
+        android:title="Save Settings"
+        android:id="@+id/action_save_to_cloud"
+        app:showAsAction="never"/>
+    <item
+        android:title="Restore Settings"
+        android:id="@+id/action_restore_settings"
+        app:showAsAction="never"/>
+    <item
         android:title="Logout"
         android:id="@+id/action_logout"
         app:showAsAction="never"/>
