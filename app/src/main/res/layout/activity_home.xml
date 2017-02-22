@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:id="@+id/ll1"
     android:weightSum="1"
-    android:background="@drawable/background">
+    android:background="@drawable/background_plain">
 
     <ImageButton
         android:layout_width="wrap_content"

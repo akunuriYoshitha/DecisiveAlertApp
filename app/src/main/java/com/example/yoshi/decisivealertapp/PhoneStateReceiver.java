@@ -126,27 +126,28 @@ public class PhoneStateReceiver extends BroadcastReceiver {
     {
         if (mydb.getSettingsData("Settings", "manual").equals("yes"))
         {
-            Toast.makeText(context, "custom contacts reading....", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "custom contacts reading....", Toast.LENGTH_SHORT).show();
             Cursor customContacts = mydb.getCustomContacts();
-            Toast.makeText(context, "custom contacts read", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, "custom contacts read", Toast.LENGTH_SHORT).show();
             if (mydb.getSettingsData("Settings", "Calls").equals("custom"))
             {
-                Toast.makeText(context, "In custom contacts mode", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "In custom contacts mode", Toast.LENGTH_SHORT).show();
                 while (customContacts.moveToNext())
                 {
-                    Toast.makeText(context, "Incoming num : " + incomingNumber, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "Incoming num : " + incomingNumber, Toast.LENGTH_SHORT).show();
 
 
 //                    Log.d("gggg", incomingNumber);
 //                    Log.d("gggg", customContacts.getString(0));
                     String customContact = customContacts.getString(0).replace(" ", "");
-                    Toast.makeText(context, "Custom Contact : " + customContact, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context, "Custom Contact : " + customContact, Toast.LENGTH_SHORT).show();
                     if (customContact.equals(incomingNumber))
                     {
-                        Toast.makeText(context, "Both are equal", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "Both are equal", Toast.LENGTH_SHORT).show();
                         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                         if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_SILENT)
                             Toast.makeText(context, "silent audio manager", Toast.LENGTH_SHORT).show();
+                        audioManager.setRingerMode(mode2);
                         audioManager.setRingerMode(mode2);
                         if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
                             Toast.makeText(context, "vibrate audio manager", Toast.LENGTH_SHORT).show();
@@ -157,9 +158,10 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                                 audioManager.setRingerMode(mode1);
                             }
                         }, 30000);
+                        return;
                     }
                 }
-                return;
+
             }
 
             Cursor data = mydb.getCallersData();

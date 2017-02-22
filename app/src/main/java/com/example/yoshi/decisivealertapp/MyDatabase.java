@@ -31,7 +31,7 @@ public class MyDatabase extends SQLiteOpenHelper{
         db.execSQL("INSERT INTO Settings VALUES ('sendSMS', 'no')");
         db.execSQL("INSERT INTO Settings VALUES ('SMSText', 'Busy!!! Please call later...')");
         db.execSQL("INSERT INTO Settings VALUES ('Calls', 'nobody')");
-        db.execSQL("INSERT INTO Settings VALUES ('Mode', 'Meeting')");
+        db.execSQL("INSERT INTO Settings VALUES ('Mode', 'Outdoor')");
 
     }
 

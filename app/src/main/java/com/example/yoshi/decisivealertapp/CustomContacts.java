@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ public class CustomContacts extends Activity{
     ListView contactsList;
     private TextView textView1;
     private TextView textView2;
+    ImageView backButton;
     MyDatabase mydb = new MyDatabase(this);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,14 @@ public class CustomContacts extends Activity{
 //        textView1 = (TextView) findViewById(R.id.textView1);
 //        textView2 = (TextView) findViewById(R.id.textView2);
         contactsList = (ListView) findViewById(R.id.contacts);
+        backButton = (ImageView) findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CustomContacts.this, SetContacts.class);
+                startActivity(intent);
+            }
+        });
         registerForContextMenu(contactsList);
         Cursor contacts = mydb.getCustomContacts();
         Log.d("mmmm", "count = " + String.valueOf(contacts.getCount()));
