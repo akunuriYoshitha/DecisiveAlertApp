@@ -37,9 +37,6 @@ public class CustomContacts extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_contacts);
-
-//        textView1 = (TextView) findViewById(R.id.textView1);
-//        textView2 = (TextView) findViewById(R.id.textView2);
         contactsList = (ListView) findViewById(R.id.contacts);
         backButton = (ImageView) findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -51,10 +48,8 @@ public class CustomContacts extends Activity{
         });
         registerForContextMenu(contactsList);
         Cursor contacts = mydb.getCustomContacts();
-        Log.d("mmmm", "count = " + String.valueOf(contacts.getCount()));
         while (contacts.moveToNext())
         {
-            Log.d("mmmm", "in while");
             list.add(contacts.getString(1));
         }
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, list);
@@ -72,20 +67,11 @@ public class CustomContacts extends Activity{
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Log.i("oooo", ((TextView) info.targetView).getText().toString());
-//        Log.d("oooo", String.valueOf(info.position));
-
         if (item.getItemId() == R.id.delete_option)
         {
-//            Toast.makeText(this, info.position, Toast.LENGTH_SHORT).show();
-            Toast.makeText(this, contactsList.getItemAtPosition(info.position).toString(), Toast.LENGTH_SHORT).show();
-            if (mydb.deleteCustomContacts(contactsList.getItemAtPosition(info.position).toString()) > 0)
-                Toast.makeText(this, "deleted in database", Toast.LENGTH_SHORT).show();
+            mydb.deleteCustomContacts(contactsList.getItemAtPosition(info.position).toString());
             list.remove(info.position);
             adapter.notifyDataSetChanged();
-//            Toast.makeText(this, "deleted", Toast.LENGTH_SHORT).show();
-
-
             return true;
         }
         return super.onContextItemSelected(item);
@@ -104,11 +90,8 @@ public class CustomContacts extends Activity{
             switch (requestCode) {
                 case RESULT_PICK_CONTACT:
                     contactPicked(data);
-                    Log.e("mmmm", " pick contact success ");
                     break;
             }
-        } else {
-            Log.e("mmmm", "Failed to pick contact");
         }
     }
 
@@ -123,7 +106,6 @@ public class CustomContacts extends Activity{
             int  phoneIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
             int  nameIndex =cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
             phoneNo = cursor.getString(phoneIndex);
-            Log.d("llll", phoneNo);
             name = cursor.getString(nameIndex);
             mydb.insertCustomContacts(phoneNo, name);
             list.add(name);

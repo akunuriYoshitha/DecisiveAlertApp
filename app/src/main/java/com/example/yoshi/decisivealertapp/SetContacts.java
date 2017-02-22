@@ -26,26 +26,17 @@ public class SetContacts extends AppCompatActivity {
         customContacts = (TextView) findViewById(R.id.customContacts);
         editList = (TextView) findViewById(R.id.editList);
         mydb = new MyDatabase(SetContacts.this);
-        //Toast.makeText(this, "Database created", Toast.LENGTH_SHORT).show();
-
-//        Toast.makeText(this, "nobody inserted", Toast.LENGTH_SHORT).show();
         nobody.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mydb.updateData("Calls", "1", "nobody");
                 mydb.updateSettings("Settings", "Calls", "nobody");
-                //String callValue = mydb.getValue("Calls");
                 Intent intent = new Intent(SetContacts.this, SettingsActivity.class);
-                //intent.putExtra("callNobody", callValue);
                 startActivity(intent);
             }
         });
         customContacts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                mydb.updateData("Calls", "1", "custom");
-
-//                String callValue = mydb.getValue("Calls");
                 mydb.updateSettings("Settings", "Calls", "custom");
                 editList.setVisibility(View.VISIBLE);
 

@@ -84,8 +84,6 @@ public class HomeActivity extends AppCompatActivity {
                         }
 
                     }
-                    else
-                        Toast.makeText(HomeActivity.this, firebaseAuth.getCurrentUser().getEmail(), Toast.LENGTH_LONG).show();
                 }
 
         };
@@ -111,7 +109,6 @@ public class HomeActivity extends AppCompatActivity {
         else
         {
             mydb.truncateCallers();
-            Toast.makeText(HomeActivity.this, "callers truncated", Toast.LENGTH_SHORT).show();
             if (mydb.getSettingsData("Settings", "Mode").equals("Meeting"))
             {
                 on_button.setVisibility(View.VISIBLE);
@@ -153,7 +150,6 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mydb.updateSettings("Settings", "manual", "no");
                 mydb.truncateCallers();
-                Toast.makeText(HomeActivity.this, "callers truncated", Toast.LENGTH_SHORT).show();
                 if (mydb.getSettingsData("Settings", "Mode").equals("Meeting"))
                 {
                     on_button.setVisibility(View.VISIBLE);
@@ -185,13 +181,12 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_setting : Toast.makeText(HomeActivity.this, "Settings clicked", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+            case R.id.action_setting : Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
                 break;
-            case R.id.action_save_to_cloud : Toast.makeText(HomeActivity.this, "Saving...", Toast.LENGTH_SHORT).show();
+            case R.id.action_save_to_cloud :
                 if (firebaseAuth.getCurrentUser() == null)
                 {
                     Toast.makeText(HomeActivity.this, "Kindly login to save your settings", Toast.LENGTH_SHORT).show();
@@ -215,22 +210,18 @@ public class HomeActivity extends AppCompatActivity {
                     settingsData = childSetting.child(customContacts.getString(0));
                     settingsData.setValue(customContacts.getString(1));
                 }
-
+                Toast.makeText(HomeActivity.this, "Settings saved", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.action_restore_settings : Toast.makeText(HomeActivity.this, "Restoring....", Toast.LENGTH_SHORT).show();
-                if (firebaseAuth.getCurrentUser() == null)
+            case R.id.action_restore_settings : if (firebaseAuth.getCurrentUser() == null)
                 {
                     Toast.makeText(HomeActivity.this, "Kindly login to restore your settings", Toast.LENGTH_SHORT).show();
                     break;
                 }
                 mydb.truncateCustomContacts();
-//                mydb.truncateSettings();
-//                        Toast.makeText(HomeActivity.this, "Custom contacts truncated", Toast.LENGTH_SHORT).show();
                 parent.child("Custom Contacts").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Map<String, String> contacts = dataSnapshot.getValue(Map.class);
-//                        Toast.makeText(HomeActivity.this, contacts.get("9032799996"), Toast.LENGTH_SHORT).show();
                         Iterator customContactsIterator = contacts.keySet().iterator();
                         while (customContactsIterator.hasNext())
                         {
@@ -249,7 +240,6 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Map<String, String> settings = dataSnapshot.getValue(Map.class);
-//                        Toast.makeText(HomeActivity.this, contacts.get("9032799996"), Toast.LENGTH_SHORT).show();
                         Iterator settingsIterator = settings.keySet().iterator();
                         while (settingsIterator.hasNext())
                         {
@@ -285,8 +275,6 @@ public class HomeActivity extends AppCompatActivity {
     {
         myAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         myAudioManager.setRingerMode(RINGER_MODE_SILENT);
-        if (myAudioManager.getRingerMode() == RINGER_MODE_SILENT)
-            Toast.makeText(HomeActivity.this, "In silent mode", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -295,8 +283,6 @@ public class HomeActivity extends AppCompatActivity {
     {
         myAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         myAudioManager.setRingerMode(RINGER_MODE_VIBRATE);
-        if (myAudioManager.getRingerMode() == RINGER_MODE_VIBRATE)
-            Toast.makeText(HomeActivity.this, "In vibrate mode", Toast.LENGTH_SHORT).show();
     }
 
     public void normalModeOn()
@@ -304,8 +290,6 @@ public class HomeActivity extends AppCompatActivity {
         myAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         myAudioManager.setRingerMode(RINGER_MODE_NORMAL);
         myAudioManager.setStreamVolume(AudioManager.STREAM_RING,myAudioManager.getStreamMaxVolume(AudioManager.STREAM_RING),0);
-        if (myAudioManager.getRingerMode() == RINGER_MODE_NORMAL)
-            Toast.makeText(HomeActivity.this, "In ringing mode", Toast.LENGTH_SHORT).show();
     }
 
     @Override

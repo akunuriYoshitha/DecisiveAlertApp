@@ -16,7 +16,7 @@ public class Alert extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AlertDialog.Builder a_builder = new AlertDialog.Builder(Alert.this);
-        a_builder.setMessage("Do you want to ON the Decisive Alert!!!")
+        a_builder.setMessage("Do you want to ON Decisive Alert!!!")
                 .setCancelable(false)
                 .setPositiveButton("Yes",new DialogInterface.OnClickListener() {
                     @Override
@@ -24,7 +24,7 @@ public class Alert extends Activity {
                         dialog.cancel();
                         try {
                             mydb.updateSettings("Settings", "manual", "yes");
-                            Toast.makeText(Alert.this, "Manual mode turned on", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Alert.this, "Decisive Alert turned on", Toast.LENGTH_SHORT).show();
                             obj.silentModeOn();
                         }
                         catch (Exception e) {
@@ -36,9 +36,7 @@ public class Alert extends Activity {
                 .setNegativeButton("No",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         finish();
-                        //Log.i("msgA", "onCreate5");
                     }
                 }) ;
         AlertDialog alert = a_builder.create();
