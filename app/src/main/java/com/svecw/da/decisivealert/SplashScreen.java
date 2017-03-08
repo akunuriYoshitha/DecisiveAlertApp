@@ -1,4 +1,4 @@
-package com.example.yoshi.decisivealertapp;
+package com.svecw.da.decisivealert;
 
 import android.app.Activity;
 import android.content.Intent;

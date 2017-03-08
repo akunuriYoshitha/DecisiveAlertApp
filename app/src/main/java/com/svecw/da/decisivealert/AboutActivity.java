@@ -1,4 +1,4 @@
-package com.example.yoshi.decisivealertapp;
+package com.svecw.da.decisivealert;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

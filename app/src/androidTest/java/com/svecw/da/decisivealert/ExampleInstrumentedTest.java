@@ -1,4 +1,4 @@
-package com.example.yoshi.decisivealertapp;
+package com.svecw.da.decisivealert;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

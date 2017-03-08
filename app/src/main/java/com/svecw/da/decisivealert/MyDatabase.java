@@ -1,4 +1,4 @@
-package com.example.yoshi.decisivealertapp;
+package com.svecw.da.decisivealert;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,10 +28,17 @@ public class MyDatabase extends SQLiteOpenHelper{
 
         db.execSQL("INSERT INTO Settings VALUES ('manual', '')");
         db.execSQL("INSERT INTO Settings VALUES ('numOfCalls', '3')");
-        db.execSQL("INSERT INTO Settings VALUES ('sendSMS', 'no')");
+        db.execSQL("INSERT INTO Settings VALUES ('sendSMS', 'None')");
         db.execSQL("INSERT INTO Settings VALUES ('SMSText', 'Busy!!! Please call later...')");
         db.execSQL("INSERT INTO Settings VALUES ('Calls', 'nobody')");
         db.execSQL("INSERT INTO Settings VALUES ('Mode', 'Outdoor')");
+
+        db.execSQL("create table SMS(sms_text primary key);");
+
+        db.execSQL("INSERT INTO SMS values ('Busy!!! Please call later...')");
+        db.execSQL("INSERT INTO SMS values ('Sorry... Unable to get you now')");
+        db.execSQL("INSERT INTO SMS values ('In Meeting')");
+
 
     }
 
@@ -41,8 +48,40 @@ public class MyDatabase extends SQLiteOpenHelper{
         db.execSQL("drop table if exists CustomContacts");
         db.execSQL("drop table if exists Settings");
         db.execSQL("drop table if exists Callers");
+        db.execSQL("drop table if exists SMS");
         onCreate(db);
 
+    }
+
+
+
+    public int insertSMS (String sms_text)
+    {
+        Log.d("mmmm", " inside databse");
+        db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("sms_text", sms_text);
+        if (db.insert("SMS", null, cv) != -1)
+            return 1;
+        else
+            return 0;
+    }
+
+    public Cursor getSMS ()
+    {
+        db = this.getWritableDatabase();
+        Cursor result = db.rawQuery("select * from SMS;", null);
+        return result;
+    }
+    public int deleteSMS(String sms)
+    {
+        Log.d("llll", "In delete method");
+        db = this.getWritableDatabase();
+        int result = db.delete("SMS", "sms_text = ?", new String[] {sms});
+        Log.d("llll", "executed query");
+        if (result > 0)
+            return 1;
+        return 0;
     }
 
     public int insertCustomContacts (String Number, String name)
@@ -83,6 +122,7 @@ public class MyDatabase extends SQLiteOpenHelper{
         Cursor result = db.rawQuery("select * from CustomContacts;", null);
         return result;
     }
+
 
 
     public  int insertCallers(String MobileNumber, String count)

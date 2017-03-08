@@ -1,10 +1,13 @@
-package com.example.yoshi.decisivealertapp;
+package com.svecw.da.decisivealert;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.text.Editable;
@@ -18,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.Switch;
@@ -45,10 +49,13 @@ public class SettingsActivity extends AppCompatActivity implements NumberPicker.
     MyDatabase mydb = new MyDatabase(SettingsActivity.this);
     TextView numCalls1, numCalls2;
     TextView calls1, calls2, calls3;
-    Spinner mode;
-    Switch sw1;
-    EditText smsText;
+    Spinner mode, sms_option;
+//    Switch sw1;
+    Button smsTextView;
+    ImageButton smsTextEdit;
+//    EditText smsText;
     ArrayAdapter<CharSequence> mode_adapter;
+    ArrayAdapter<CharSequence> smsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,21 +68,39 @@ public class SettingsActivity extends AppCompatActivity implements NumberPicker.
 
         numCalls1 = (TextView) findViewById(R.id.numCalls1);
         numCalls2 = (TextView) findViewById(R.id.numCalls2);
-        sw1 = (Switch) findViewById(R.id.sms_switch);
-        smsText = (EditText) findViewById(R.id.smsText);
+        sms_option = (Spinner) findViewById(R.id.sms_switch);
+        smsTextView = (Button) findViewById(R.id.smsTextButton);
+        smsTextEdit = (ImageButton) findViewById(R.id.smsEdit);
         firebaseAuth = FirebaseAuth.getInstance();
 
 
 
 
         numCalls2.setText(mydb.getSettingsData("Settings", "numOfCalls") + " > ");
-        smsText.setText(mydb.getSettingsData("Settings", "SMSText"));
+        smsTextView.setText(mydb.getSettingsData("Settings", "SMSText"));
         calls2.setText(mydb.getSettingsData("Settings", "Calls") + " > ");
-        if (mydb.getSettingsData("Settings", "sendSMS").equals("yes"))
-            sw1.setChecked(true);
-        else
-            sw1.setChecked(false);
         mode = (Spinner) findViewById(R.id.mode);
+        sms_option = (Spinner) findViewById(R.id.sms_switch);
+        smsAdapter = ArrayAdapter.createFromResource(this, R.array.sms_options, android.R.layout.simple_spinner_item);
+        smsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sms_option.setAdapter(smsAdapter);
+        String sendSMS = mydb.getSettingsData("Settings", "sendSMS");
+        sms_option.setSelection(smsAdapter.getPosition(sendSMS));
+        sms_option.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mydb.updateSettings("Settings", "sendSMS", parent.getItemAtPosition(position).toString());
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+
 
         mode_adapter = ArrayAdapter.createFromResource(this, R.array.mode, android.R.layout.simple_spinner_item);
         mode_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -109,8 +134,6 @@ public class SettingsActivity extends AppCompatActivity implements NumberPicker.
 
             }
         });
-        if (mydb.getSettingsData("Settings", "sendSMS").equals("yes"))
-            sw1.setChecked(true);
         calls1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,39 +167,17 @@ public class SettingsActivity extends AppCompatActivity implements NumberPicker.
                 show();
             }
         });
-        sw1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+        smsTextEdit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                {
-                    mydb.updateSettings("Settings", "sendSMS", "yes");
-                }
-                else
-                {
-                    mydb.updateSettings("Settings", "sendSMS", "no");
-                }
+            public void onClick(View v) {
+                Intent intent = new Intent(SettingsActivity.this, EditSMS.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
             }
         });
 
-
-        TextWatcher textWatcher = new TextWatcher() {
-
-            public void afterTextChanged(Editable s) {
-
-            }
-
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-
-
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
-                mydb.updateSettings("Settings", "SMSText", smsText.getText().toString());
-            }
-        };
-
-        smsText.addTextChangedListener(textWatcher);
     }
 
 
@@ -200,21 +201,12 @@ public class SettingsActivity extends AppCompatActivity implements NumberPicker.
         }
         return super.onOptionsItemSelected(item);
     }
-    protected void sendSMS(String contacts, String msg) {
-        try {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(contacts, null, msg, null, null);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-    }
 
     public void show()
     {
 
         final Dialog d = new Dialog(SettingsActivity.this);
-        d.setTitle("NumberPicker");
+        d.setTitle("Number of Calls");
 
         d.setContentView(R.layout.dialog);
         Button b1 = (Button) d.findViewById(R.id.set_number_picker);

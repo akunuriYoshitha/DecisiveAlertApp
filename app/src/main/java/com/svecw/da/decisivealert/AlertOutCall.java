@@ -1,10 +1,10 @@
-package com.example.yoshi.decisivealertapp;
+package com.svecw.da.decisivealert;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.media.AudioManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -25,6 +25,8 @@ public class AlertOutCall extends Activity{
                         try {
                             mydb.updateSettings("Settings", "manual", "no");
                             Toast.makeText(AlertOutCall.this, "Decisive Alert turned off", Toast.LENGTH_SHORT).show();
+                            AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+                            audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                         }
                         catch (Exception e) {
                             e.printStackTrace();
@@ -36,10 +38,12 @@ public class AlertOutCall extends Activity{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
+                        return;
                     }
                 }) ;
         AlertDialog alert = a_builder.create();
         alert.setTitle("Alert !!!");
         alert.show();
+
     }
 }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    tools:context="com.example.yoshi.decisivealertapp.SettingsActivity">
+    android:background="@drawable/background_plain"
+    tools:context="com.svecw.da.decisivealert.SettingsActivity">
 
 
     <TextView
@@ -81,10 +82,10 @@
         android:layout_alignStart="@+id/numCalls1"
         android:layout_marginTop="13dp" />
 
-    <Switch
+    <Spinner
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-
+        android:popupBackground="#ffccff"
         android:textSize="@dimen/text_size_settings"
         android:switchMinWidth="50dp"
         android:id="@+id/sms_switch"
@@ -104,7 +105,8 @@
         android:layout_alignLeft="@+id/sms"
         android:layout_alignStart="@+id/sms"
         android:layout_marginTop="12dp"
-        android:id="@+id/usermsg1" />
+        android:id="@+id/usermsg1"
+         />
 
     <TextView
         android:text=""
@@ -120,23 +122,7 @@
 
 
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="@string/sampleSMS"
-        android:textSize="@dimen/sample_msg_size"
 
-        android:textColor="@color/colorAccent"
-        android:ems="10"
-        android:id="@+id/smsText"
-        android:gravity="bottom"
-        android:layout_alignTop="@+id/usermsg1"
-        android:layout_alignLeft="@+id/usermsg1"
-        android:layout_alignStart="@+id/usermsg1"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/usermsg1" />
 
     <Spinner
         android:id="@+id/mode"
@@ -144,12 +130,36 @@
         android:layout_alignParentRight="true"
         android:layout_height="wrap_content"
         android:textAlignment="textEnd"
-        android:popupBackground="#ffff80"
+        android:popupBackground="#ffccff"
         android:layout_above="@+id/numCalls1"
         android:layout_toRightOf="@+id/calls1"
         android:layout_toEndOf="@+id/calls1"
         android:layout_marginLeft="11dp"
         android:layout_marginStart="11dp">
     </Spinner>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        app:srcCompat="@drawable/edit_icon"
+        android:id="@+id/smsEdit"
+        android:layout_below="@+id/sms_switch"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:text="Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/smsTextButton"
+        android:background="@null"
+        android:textSize="@dimen/sample_msg_size"
+        android:textAllCaps="false"
+        android:textAlignment="textStart"
+        android:textColor="@color/colorAccent"
+        android:layout_below="@+id/smsEdit"
+        android:layout_alignLeft="@+id/usermsg1"
+        android:layout_alignStart="@+id/usermsg1" />
 
 </RelativeLayout>

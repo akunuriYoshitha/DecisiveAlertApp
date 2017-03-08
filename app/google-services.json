@@ -8,6 +8,50 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:468619537365:android:c8cdb549d4914e93",
+        "android_client_info": {
+          "package_name": "com.svecw.da.decisivealert"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "468619537365-qr2tfg71ll1jfkta449itg5ihmqs2kva.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.svecw.da.decisivealert",
+            "certificate_hash": "ca35f0dceadbd663676685b716cbb199b6cdf97f"
+          }
+        },
+        {
+          "client_id": "468619537365-al50ea935t8s3lqiuor1r7skrfv4o03q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCH6ImorrivNtBjVw-vv-aakUfZzkPEicI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "468619537365-al50ea935t8s3lqiuor1r7skrfv4o03q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:468619537365:android:4909e24f0e94013b",
         "android_client_info": {
           "package_name": "com.example.yoshi.decisivealertapp"
@@ -15,11 +59,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "468619537365-1d7h0i8qicp6cc3ck1keqjuu8960a9ft.apps.googleusercontent.com",
+          "client_id": "468619537365-dn6jqinm58s2cqc9169h86eh6fvpm6ks.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.yoshi.decisivealertapp",
-            "certificate_hash": "F87E19AC11D218729BB1AD0489273319CCE57987"
+            "certificate_hash": "f87e19ac11d218729bb1ad0489273319cce57987"
           }
         },
         {

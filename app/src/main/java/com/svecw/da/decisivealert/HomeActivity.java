@@ -1,11 +1,15 @@
-package com.example.yoshi.decisivealertapp;
+package com.svecw.da.decisivealert;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +37,7 @@ import static android.media.AudioManager.RINGER_MODE_SILENT;
 import static android.media.AudioManager.RINGER_MODE_VIBRATE;
 
 public class HomeActivity extends AppCompatActivity {
+    private static final int MY_PERMISSIONS_REQUEST = 1;
     FirebaseAuth firebaseAuth;
     FirebaseAuth.AuthStateListener authStateListener;
     Firebase childSetting, parent, settingsData;
@@ -47,6 +52,34 @@ public class HomeActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        if (ContextCompat.checkSelfPermission(HomeActivity.this,
+                android.Manifest.permission.READ_CONTACTS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(HomeActivity.this,
+                    new String[]{android.Manifest.permission.READ_CONTACTS},
+                    MY_PERMISSIONS_REQUEST);
+
+        }
+
+        if (ContextCompat.checkSelfPermission(HomeActivity.this,
+                android.Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(HomeActivity.this,
+                    new String[]{android.Manifest.permission.READ_PHONE_STATE},
+                    MY_PERMISSIONS_REQUEST);
+
+        }
+
+        if (ContextCompat.checkSelfPermission(HomeActivity.this,
+                android.Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(HomeActivity.this,
+                    new String[]{android.Manifest.permission.SEND_SMS},
+                    MY_PERMISSIONS_REQUEST);
+
+        }
+
         firebaseAuth = FirebaseAuth.getInstance();
         parameter = getIntent().getStringExtra("EXTRA_SESSION_ID");
         on_button = (ImageButton) findViewById(R.id.on_button);
@@ -87,7 +120,6 @@ public class HomeActivity extends AppCompatActivity {
                 }
 
         };
-
         if(mydb.getSettingsData("Settings", "manual").equals("yes"))
         {
             if (mydb.getSettingsData("Settings", "Mode").equals("Meeting"))
@@ -167,7 +199,6 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-//        Intent intent = new Intent(MainActivity.this, OutgoingCallReceiver.class);
 
 
     }
@@ -195,8 +226,6 @@ public class HomeActivity extends AppCompatActivity {
                     break;
                 }
 
-
-//                Firebase settingData = childSetting.child("manualmode");
                 Cursor settings = mydb.getAllSettings();
                 while (settings.moveToNext())
                 {
@@ -214,48 +243,58 @@ public class HomeActivity extends AppCompatActivity {
                 }
                 Toast.makeText(HomeActivity.this, "Settings saved", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.action_restore_settings : if (firebaseAuth.getCurrentUser() == null)
-                {
-                    Toast.makeText(HomeActivity.this, "Kindly login to restore your settings", Toast.LENGTH_SHORT).show();
-                    break;
+            case R.id.action_restore_settings :if (firebaseAuth.getCurrentUser() == null)
+            {
+                Toast.makeText(HomeActivity.this, "Kindly login to restore your settings", Toast.LENGTH_SHORT).show();
+                break;
+            }
+                try {
+                    mydb.truncateCustomContacts();
+                    parent.child("Custom Contacts").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Map<String, String> contacts = dataSnapshot.getValue(Map.class);
+                            if (contacts != null)
+                            {
+                                Iterator customContactsIterator = contacts.keySet().iterator();
+
+                                while (customContactsIterator.hasNext())
+                                {
+                                    String key = customContactsIterator.next().toString();
+                                    int result = mydb.insertCustomContacts(key, contacts.get(key));
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+
+                    parent.child("Settings").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Map<String, String> settings = dataSnapshot.getValue(Map.class);
+                            Iterator settingsIterator = settings.keySet().iterator();
+                            while (settingsIterator.hasNext())
+                            {
+                                String key = settingsIterator.next().toString();
+                                boolean result = mydb.updateSettings("Settings", key, settings.get(key));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+
+                        }
+                    });
+
+                } catch(Exception e) {
+
                 }
-                mydb.truncateCustomContacts();
-                parent.child("Custom Contacts").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Map<String, String> contacts = dataSnapshot.getValue(Map.class);
-                        Iterator customContactsIterator = contacts.keySet().iterator();
-                        while (customContactsIterator.hasNext())
-                        {
-                            String key = customContactsIterator.next().toString();
-                            int result = mydb.insertCustomContacts(key, contacts.get(key));
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                });
-
-                parent.child("Settings").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Map<String, String> settings = dataSnapshot.getValue(Map.class);
-                        Iterator settingsIterator = settings.keySet().iterator();
-                        while (settingsIterator.hasNext())
-                        {
-                            String key = settingsIterator.next().toString();
-                            boolean result = mydb.updateSettings("Settings", key, settings.get(key));
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                });
-
+                Toast.makeText(HomeActivity.this, "Settings Restored...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_logout : if (firebaseAuth.getCurrentUser() == null)
             {

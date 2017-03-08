@@ -1,8 +1,9 @@
-package com.example.yoshi.decisivealertapp;
+package com.svecw.da.decisivealert;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -11,7 +12,7 @@ import android.widget.Toast;
  */
 public class Alert extends Activity {
     MyDatabase mydb = new MyDatabase(this);
-    HomeActivity obj = new HomeActivity();
+    AudioManager audioManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +26,16 @@ public class Alert extends Activity {
                         try {
                             mydb.updateSettings("Settings", "manual", "yes");
                             Toast.makeText(Alert.this, "Decisive Alert turned on", Toast.LENGTH_SHORT).show();
-                            obj.silentModeOn();
+                            if (mydb.getSettingsData("Settings", "Mode").equals("Meeting"))
+                            {
+                                audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+                                audioManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                            }
+                            else
+                            {
+                                audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+                                audioManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+                            }
                         }
                         catch (Exception e) {
                             e.printStackTrace();

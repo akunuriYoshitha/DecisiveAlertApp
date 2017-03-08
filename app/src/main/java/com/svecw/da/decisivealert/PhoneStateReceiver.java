@@ -1,14 +1,15 @@
-package com.example.yoshi.decisivealertapp;
+package com.svecw.da.decisivealert;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.media.AudioManager;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -32,7 +33,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                     changePhoneMode(context, mydb, incomingNumber, AudioManager.RINGER_MODE_SILENT, AudioManager.RINGER_MODE_VIBRATE);
                 else
                     changePhoneMode(context, mydb, incomingNumber, AudioManager.RINGER_MODE_VIBRATE, AudioManager.RINGER_MODE_NORMAL);
-
+                return;
             }
 
             if (mydb.getSettingsData("Settings", "manual").equals("yes")) {
@@ -50,8 +51,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                         e.printStackTrace();
                     }
                 }
-
-
+                return;
             }
 
         } catch (Exception e) {
@@ -84,6 +84,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 case AudioManager.RINGER_MODE_NORMAL:
                     break;
             }
+            return;
         }
     }
 
@@ -124,6 +125,7 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                     {
                         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
                         audioManager.setRingerMode(mode2);
+                        audioManager.setRingerMode(mode2);
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
                             @Override
@@ -142,20 +144,33 @@ public class PhoneStateReceiver extends BroadcastReceiver {
                 int res = mydb.insertCallers(incomingNumber, "1");
             }
             insert = 0;
-            if ((mydb.getSettingsData("Settings", "sendSMS").equals("yes")))
+            if ((mydb.getSettingsData("Settings", "sendSMS").equals("All")))
             {
-                sendSMS(incomingNumber, mydb.getSettingsData("Settings", "SMSText"));
+                sendSMS(context, incomingNumber, mydb.getSettingsData("Settings", "SMSText"));
+            }
+            else if ((mydb.getSettingsData("Settings", "sendSMS").equals("Favourites")))
+            {
+                Cursor favContacts = context.getContentResolver().query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, "starred=?",
+                        new String[]{"1"}, null);
+                while (favContacts.moveToNext())
+                {
+                    if (incomingNumber.replace(" ", "").equals(favContacts.getString(favContacts.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)).replace(" ", "")))
+                    {
+                        sendSMS(context, incomingNumber, mydb.getSettingsData("Settings", "SMSText"));
+                        return;
+                    }
+                }
             }
         }
     }
 
-    protected void sendSMS(String contacts, String msg) {
+    protected void sendSMS(Context context, String contacts, String msg) {
         try {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(contacts, null, msg, null, null);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
     }
 }
